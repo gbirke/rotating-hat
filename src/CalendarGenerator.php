@@ -7,14 +7,14 @@ use Sabre\VObject\Component\VCalendar;
 class CalendarGenerator
 {
     public function createCalendarObject( TaskSpec $spec ): VCalendar {
-        if ( count( $spec->getNames() ) < 2 ) {
-            throw new \InvalidArgumentException( 'There must be at least two people' );
+        if ( count( $spec->getLabels() ) < 2 ) {
+            throw new \InvalidArgumentException( 'There must be at least two labels' );
         }
         $cal = new VCalendar();
 
         $startDate = $this->getStartDate( $spec );
         $interval = Duration::getIntervalFromDuration( $spec->getDuration() );
-        foreach( $spec->getNames() as $name ) {
+        foreach($spec->getLabels() as $name ) {
             $event = [
                 'SUMMARY' => $name,
                 'DTSTART' => $startDate,

@@ -13,12 +13,12 @@ class CalendarGeneratorTest extends TestCase
     /**
      * @expectedException InvalidArgumentException
      */
-    public function testGivenLessThenTwoPeople_anExceptionIsThrown() {
+    public function testGivenLessThenTwoLabels_anExceptionIsThrown() {
         $generator = new CalendarGenerator();
         $generator->createCalendarObject( new TaskSpec(['Alice'], new DateTime(), Duration::Day ) );
     }
 
-    public function testGivenTwoPeople_twoCalendarEventsAreCreated() {
+    public function testGivenTwoLabels_twoCalendarEventsAreCreated() {
         $generator = new CalendarGenerator();
         $calendar = $generator->createCalendarObject( new TaskSpec(['Alice', 'Bob'], new DateTime(), Duration::Day ) );
         $this->assertEventCount( 2, $calendar );
@@ -30,7 +30,7 @@ class CalendarGeneratorTest extends TestCase
         $this->assertSame( $expectedCount, count( $events ) );
     }
 
-    public function testGivenFivePeople_fiveCalendarEventsAreCreated() {
+    public function testGivenFiveLabels_fiveCalendarEventsAreCreated() {
         $generator = new CalendarGenerator();
         $calendar = $generator->createCalendarObject( new TaskSpec(
             ['Alice', 'Bob', 'Carol', 'Dave', 'Eva'],

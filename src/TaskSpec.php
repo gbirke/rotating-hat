@@ -7,23 +7,22 @@ use DateTime;
 
 class TaskSpec
 {
-    private $names;
+    private $labels;
     private $startDate;
     private $duration;
     private $endDate;
-    // TODO prefix
 
-    public function __construct( array $names, DateTime $startDate, int $duration, ?DateTime $endDate = null )
+    public function __construct(array $labels, DateTime $startDate, int $duration, ?DateTime $endDate = null )
     {
-        $this->names = $names;
+        $this->labels = $labels;
         $this->startDate = $startDate;
         $this->duration = $duration;
         $this->endDate = $endDate;
     }
 
-    public function getNames(): array
+    public function getLabels(): array
     {
-        return $this->names;
+        return $this->labels;
     }
 
     public function getStartDate(): DateTime
