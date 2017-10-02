@@ -10,14 +10,14 @@ class TaskSpec
     private $labels;
     private $startDate;
     private $duration;
-    private $endDate;
+    private $recurrence;
 
-    public function __construct(array $labels, DateTime $startDate, int $duration, ?DateTime $endDate = null )
+    public function __construct(array $labels, DateTime $startDate, int $duration, Recurrence $recurrence )
     {
         $this->labels = $labels;
         $this->startDate = $startDate;
         $this->duration = $duration;
-        $this->endDate = $endDate;
+        $this->recurrence = $recurrence;
     }
 
     public function getLabels(): array
@@ -35,10 +35,9 @@ class TaskSpec
         return $this->duration;
     }
 
-    public function getEndDate(): ?DateTime
+    public function getRecurence(): Recurrence
     {
-        return $this->endDate;
+        return $this->recurrence;
     }
-
 
 }

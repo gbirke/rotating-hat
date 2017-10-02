@@ -20,8 +20,10 @@ class CalendarGenerator
                 'SUMMARY' => $label,
                 'DTSTART' => $startDate,
                 'DURATION' => Duration::getDurationSpec( $spec->getDuration() ),
-                'RRULE' => $recurrence
             ];
+            if ( $spec->getRecurence()->isRecurring() ) {
+                $event['RRULE'] = $recurrence;
+            }
 
             $cal->add( 'VEVENT', $event );
             $startDate = (clone $startDate)->add( $interval );
@@ -41,8 +43,8 @@ class CalendarGenerator
             'FREQ' => $durationMap[$spec->getDuration()],
             'INTERVAL' => count( $spec->getLabels() )
         ];
-        if ( $spec->getEndDate() ) {
-            $recurrence['UNTIL'] = $spec->getEndDate()->format( 'Ymd\THis\Z' );
+        if ( $spec->getRecurence()->isRecurring() && !$spec->getRecurence()->isForever()  ) {
+            $recurrence['UNTIL'] = $spec->getRecurence()->getEndDate()->format( 'Ymd\THis\Z' );
         }
         return $recurrence;
     }

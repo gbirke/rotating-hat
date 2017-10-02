@@ -1,4 +1,5 @@
 <?php
+use Gbirke\TaskHat\Recurrence;
 use Gbirke\TaskHat\TaskSpec;
 use Silex\Application;
 use Symfony\Component\HttpFoundation\Request;
@@ -28,7 +29,7 @@ $app->post( '/create-calendar', function (Application $app, Request $request ) {
             new Assert\Regex( ['pattern' => '/\w+\r?\n\w+/', 'message' => 'You must specify at least 2 names' ])
         ],
         // TOOD check allowed values
-        'recurrence' => new Assert\Optional( new Assert\NotBlank() ),
+        'duration' => new Assert\Optional( new Assert\NotBlank() ),
         'startOn' => [
             new Assert\NotBlank(),
             new Assert\Date()
@@ -45,9 +46,7 @@ $app->post( '/create-calendar', function (Application $app, Request $request ) {
 
     } else {
         $prefix = trim( $request->request->get('name') );
-        error_log("prefix=$prefix");
         $prefix = $prefix ? $prefix . ': ' : '';
-        error_log("pureprefix=$prefix");
         $labels = array_filter( array_map( function($name) use ($prefix) {
             $name = trim($name);
             return $name ? $prefix.$name : '';
@@ -57,7 +56,7 @@ $app->post( '/create-calendar', function (Application $app, Request $request ) {
             $request->get('startOn' ),
             new DateTimeZone( $request->get( 'startOnTimezone' ) )
         );
-        $spec = new TaskSpec( $labels, $startOn, (int) $request->get('recurrence') );
+        $spec = new TaskSpec( $labels, $startOn, (int) $request->get('duration'), Recurrence::newOnce() );
         $generator = new \Gbirke\TaskHat\CalendarGenerator();
         $calendar = $generator->createCalendarObject( $spec );
         return new Response( $calendar->serialize(), Response::HTTP_OK, [
