@@ -1,0 +1,46 @@
+{% extends('index.twig') %}
+
+{% block body %}
+<div class="starter-template">
+    <h1>Rotating Hat</h1>
+    <p class="lead">Distribute a recurring task between people</p>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <form role="form" action="/create-calendar" method="post">
+            <div class="form-group">
+                <label class="control-label" for="name">Name of the task</label>
+
+                <input class="form-control" id="name" placeholder="Employee of the day">
+            </div>
+
+            <div class="form-group">
+                <label class="control-label" for="people">Password</label>
+
+                <textarea class="form-control" name="people" id="people"></textarea>
+                <p class="help-block">One name per line, at least 2 names</p>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label" for="recurrence">Change role</label>
+
+                <select class="form-control" name="recurrence" id="recurrence">
+                    <option value="1">Daily</option>
+                    <option value="2">Weekly</option>
+                    <option value="3">Monthly</option>
+                    <option value="4">Yearly</option>
+                    <!-- TODO custom selection -->
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label" for="startOn">Start on</label>
+
+                <input class="form-control" id="startOn" name="startOn" value="{{ "now"|date("Y-m-d")  }}" />
+            </div>
+
+            <button type="submit" class="btn">Get Calendar file</button>
+        </form>
+    </div>
+</div>
+{% endblock %}
