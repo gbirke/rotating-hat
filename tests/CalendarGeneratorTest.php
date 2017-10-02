@@ -156,6 +156,18 @@ class CalendarGeneratorTest extends TestCase
         $this->assertEventsHaveProperty( 'DURATION', 'P2D', $calendar );
     }
 
+    public function testWhenEndDateIsGiven_allEventsEndOnThatDay() {
+        $generator = new CalendarGenerator();
+        $end = new DateTime( '2017-12-24' );
+        $calendar = $generator->createCalendarObject( new TaskSpec(
+            ['Alice', 'Bob', 'Carol' ],
+            new DateTime( '2017-10-14' ),
+            Duration::Weekends,
+            $end
+        ) );
+        $this->assertEventsHaveProperty( 'DTEND', $end->format( self::VCS_TIMESTAMP ), $calendar );
+    }
+
     private function assertDateTimeMatches( DateTime $expectedTime, string $value ) {
         $this->assertSame( $expectedTime->format(self::VCS_TIMESTAMP), $value );
     }

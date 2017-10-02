@@ -15,11 +15,16 @@ class CalendarGenerator
         $startDate = $this->getStartDate( $spec );
         $interval = Duration::getIntervalFromDuration( $spec->getDuration() );
         foreach( $spec->getNames() as $name ) {
-            $cal->add( 'VEVENT', [
+            $event = [
                 'SUMMARY' => $name,
                 'DTSTART' => $startDate,
                 'DURATION' => Duration::getDurationSpec( $spec->getDuration() )
-            ] );
+            ];
+            $endDate = $spec->getEndDate();
+            if ( !is_null( $endDate ) ) {
+                $event['DTEND'] = $endDate;
+            }
+            $cal->add( 'VEVENT', $event );
             $startDate = (clone $startDate)->add( $interval );
         }
         return $cal;
