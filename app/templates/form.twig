@@ -42,6 +42,12 @@
                 <label class="control-label" for="startOn">Start on</label>
 
                 <input class="form-control" id="startOn" name="startOn" value="{{ "now"|date("Y-m-d")  }}" />
+                <select class="form-control" name="startOnTimezone" id="startOnTimezone">
+                    <option value="Europe/Berlin">Europe/Berlin</option>
+                    <option value="UTC">UTC</option>
+
+                    <!-- TODO proper timezone selection -->
+                </select>
             </div>
 
             <button type="submit" class="btn">Get Calendar file</button>

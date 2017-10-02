@@ -33,6 +33,10 @@ $app->post( '/create-calendar', function (Application $app, Request $request ) {
             new Assert\NotBlank(),
             new Assert\Date()
         ],
+        'startOnTimezone' => [
+            new Assert\NotBlank(),
+            // Todo validate timezone options
+        ],
     ]] );
     $errors = $app['validator']->validate( $request->request->all(), $newTaskConstraints );
 
@@ -46,8 +50,11 @@ $app->post( '/create-calendar', function (Application $app, Request $request ) {
             return $name ? $prefix.': '.$name : '';
         }, explode( "\n", $request->get('people'))));
 
-
-        $spec = new TaskSpec( $labels, new DateTime($request->get('startOn' )), (int) $request->get('recurrence') );
+        $startOn = new DateTime(
+            $request->get('startOn' ),
+            new DateTimeZone( $request->get( 'startOnTimezone' ) )
+        );
+        $spec = new TaskSpec( $labels, $startOn, (int) $request->get('recurrence') );
         $generator = new \Gbirke\TaskHat\CalendarGenerator();
         $calendar = $generator->createCalendarObject( $spec );
         return new Response( $calendar->serialize(), Response::HTTP_OK, [
