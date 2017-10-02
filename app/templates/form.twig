@@ -8,7 +8,7 @@
 <div class="row">
     <div class="col-md-12">
         <form role="form" action="/create-calendar" method="post">
-            {% if errors %}
+            {% if errors is defined %}
                 <ul style="color:red">
                     {% for e in errors %}<li>{{ e.propertyPath }}: {{ e.message }}</li>{% endfor %}
                 </ul>
