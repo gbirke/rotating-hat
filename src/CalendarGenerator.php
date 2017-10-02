@@ -17,7 +17,8 @@ class CalendarGenerator
         foreach( $spec->getNames() as $name ) {
             $cal->add( 'VEVENT', [
                 'SUMMARY' => $name,
-                'DTSTART' => $startDate
+                'DTSTART' => $startDate,
+                'DURATION' => Duration::getDurationSpec( $spec->getDuration() )
             ] );
             $startDate = (clone $startDate)->add( $interval );
         }

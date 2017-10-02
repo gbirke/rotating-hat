@@ -31,4 +31,20 @@ class Duration
         return new \DateInterval( $map[$duration] );
     }
 
+    public static function getDurationSpec( int $duration ): string
+    {
+        $map = [
+            self::Day => 'P1D',
+            self::Week => 'P1W',
+            self::Month => 'P1M',
+            self::Year => 'P1Y',
+            self::Weekdays => 'P5D',
+            self::Weekends => 'P2D'
+        ];
+        if ( empty( $map[$duration] ) ) {
+            throw new InvalidArgumentException( 'Unknown duration' );
+        }
+        return $map[$duration];
+    }
+
 }

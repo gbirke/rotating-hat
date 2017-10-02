@@ -8,6 +8,8 @@ use Sabre\VObject\Component\VCalendar;
 
 class CalendarGeneratorTest extends TestCase
 {
+    const VCS_TIMESTAMP = 'Ymd\THis\Z';
+
     /**
      * @expectedException InvalidArgumentException
      */
@@ -118,9 +120,50 @@ class CalendarGeneratorTest extends TestCase
         $generator->createCalendarObject( new TaskSpec(['Alice', 'Bob', 'Carol' ], $start, Duration::Weekends ) );
     }
 
+    public function testGivenDailyEvent_DurationIsOneDay() {
+        $generator = new CalendarGenerator();
+        $calendar = $generator->createCalendarObject( new TaskSpec(['Alice', 'Bob', 'Carol' ], new DateTime(), Duration::Day ) );
+        $this->assertEventsHaveProperty( 'DURATION', 'P1D', $calendar );
+    }
 
+    public function testGivenWeeklyEvent_DurationIsOneWeek() {
+        $generator = new CalendarGenerator();
+        $calendar = $generator->createCalendarObject( new TaskSpec(['Alice', 'Bob', 'Carol' ], new DateTime(), Duration::Week ) );
+        $this->assertEventsHaveProperty( 'DURATION', 'P1W', $calendar );
+    }
+
+    public function testGivenMonthlyEvent_DurationIsOneMoth() {
+        $generator = new CalendarGenerator();
+        $calendar = $generator->createCalendarObject( new TaskSpec(['Alice', 'Bob', 'Carol' ], new DateTime(), Duration::Month ) );
+        $this->assertEventsHaveProperty( 'DURATION', 'P1M', $calendar );
+    }
+
+    public function testGivenYearlyEvent_DurationIsOneYear() {
+        $generator = new CalendarGenerator();
+        $calendar = $generator->createCalendarObject( new TaskSpec(['Alice', 'Bob', 'Carol' ], new DateTime(), Duration::Year ) );
+        $this->assertEventsHaveProperty( 'DURATION', 'P1Y', $calendar );
+    }
+
+    public function testGivenWorkweekEvent_DurationIsFiveDays() {
+        $generator = new CalendarGenerator();
+        $calendar = $generator->createCalendarObject( new TaskSpec(['Alice', 'Bob', 'Carol' ], new DateTime( '2017-10-09' ), Duration::Weekdays ) );
+        $this->assertEventsHaveProperty( 'DURATION', 'P5D', $calendar );
+    }
+
+    public function testGivenWeekendEvent_DurationIsFiveDays() {
+        $generator = new CalendarGenerator();
+        $calendar = $generator->createCalendarObject( new TaskSpec(['Alice', 'Bob', 'Carol' ], new DateTime( '2017-10-14' ), Duration::Weekends ) );
+        $this->assertEventsHaveProperty( 'DURATION', 'P2D', $calendar );
+    }
 
     private function assertDateTimeMatches( DateTime $expectedTime, string $value ) {
-        $this->assertSame( $expectedTime->format( 'Ymd\THis\Z' ), $value );
+        $this->assertSame( $expectedTime->format(self::VCS_TIMESTAMP), $value );
+    }
+
+    private function assertEventsHaveProperty( string $propertyName, $property, VCalendar $calendar)
+    {
+        foreach( $calendar->getBaseComponents( 'VEVENT' ) as $event ) {
+            $this->assertSame( $event->{$propertyName}->getValue(), $property );
+        }
     }
 }
