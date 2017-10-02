@@ -11,6 +11,7 @@ class TaskSpec
     private $startDate;
     private $duration;
     private $endDate;
+    // TODO prefix
 
     public function __construct( array $names, DateTime $startDate, int $duration, ?DateTime $endDate = null )
     {
