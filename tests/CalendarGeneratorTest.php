@@ -87,7 +87,7 @@ class CalendarGeneratorTest extends TestCase
     public function testGivenWeekdayDuration_eventStartOneWeekAfterEachOther() {
         $generator = new CalendarGenerator();
         $start = new DateTime( '2017-10-09' );
-        $calendar = $generator->createCalendarObject( new TaskSpec(['Alice', 'Bob', 'Carol' ], $start, Duration::Weekdays ) );
+        $calendar = $generator->createCalendarObject( new TaskSpec(['Alice', 'Bob', 'Carol' ], $start, Duration::Workweek ) );
         $events = $calendar->getBaseComponents( 'VEVENT' );
         $this->assertDateTimeMatches( new DateTime( '2017-10-16' ), $events[1]->DTSTART->getValue() );
         $this->assertDateTimeMatches( new DateTime( '2017-10-23' ), $events[2]->DTSTART->getValue() );
@@ -99,13 +99,13 @@ class CalendarGeneratorTest extends TestCase
     public function testGivenWeekdayDurationStartingOnTuesday_exceptionIsThrown() {
         $generator = new CalendarGenerator();
         $start = new DateTime( '2017-10-10' );
-        $generator->createCalendarObject( new TaskSpec(['Alice', 'Bob', 'Carol' ], $start, Duration::Weekdays ) );
+        $generator->createCalendarObject( new TaskSpec(['Alice', 'Bob', 'Carol' ], $start, Duration::Workweek ) );
     }
 
     public function testGivenWeekendDuration_eventStartOneWeekAfterEachOther() {
         $generator = new CalendarGenerator();
         $start = new DateTime( '2017-10-14' );
-        $calendar = $generator->createCalendarObject( new TaskSpec(['Alice', 'Bob', 'Carol' ], $start, Duration::Weekends ) );
+        $calendar = $generator->createCalendarObject( new TaskSpec(['Alice', 'Bob', 'Carol' ], $start, Duration::Weekend ) );
         $events = $calendar->getBaseComponents( 'VEVENT' );
         $this->assertDateTimeMatches( new DateTime( '2017-10-21' ), $events[1]->DTSTART->getValue() );
         $this->assertDateTimeMatches( new DateTime( '2017-10-28' ), $events[2]->DTSTART->getValue() );
@@ -117,7 +117,7 @@ class CalendarGeneratorTest extends TestCase
     public function testGivenWeekendDurationStartingOnTuesday_exceptionIsThrown() {
         $generator = new CalendarGenerator();
         $start = new DateTime( '2017-10-10' );
-        $generator->createCalendarObject( new TaskSpec(['Alice', 'Bob', 'Carol' ], $start, Duration::Weekends ) );
+        $generator->createCalendarObject( new TaskSpec(['Alice', 'Bob', 'Carol' ], $start, Duration::Weekend ) );
     }
 
     public function testGivenDailyEvent_DurationIsOneDay() {
@@ -146,13 +146,13 @@ class CalendarGeneratorTest extends TestCase
 
     public function testGivenWorkweekEvent_DurationIsFiveDays() {
         $generator = new CalendarGenerator();
-        $calendar = $generator->createCalendarObject( new TaskSpec(['Alice', 'Bob', 'Carol' ], new DateTime( '2017-10-09' ), Duration::Weekdays ) );
+        $calendar = $generator->createCalendarObject( new TaskSpec(['Alice', 'Bob', 'Carol' ], new DateTime( '2017-10-09' ), Duration::Workweek ) );
         $this->assertEventsHaveProperty( 'DURATION', 'P5D', $calendar );
     }
 
     public function testGivenWeekendEvent_DurationIsFiveDays() {
         $generator = new CalendarGenerator();
-        $calendar = $generator->createCalendarObject( new TaskSpec(['Alice', 'Bob', 'Carol' ], new DateTime( '2017-10-14' ), Duration::Weekends ) );
+        $calendar = $generator->createCalendarObject( new TaskSpec(['Alice', 'Bob', 'Carol' ], new DateTime( '2017-10-14' ), Duration::Weekend ) );
         $this->assertEventsHaveProperty( 'DURATION', 'P2D', $calendar );
     }
 
@@ -162,7 +162,7 @@ class CalendarGeneratorTest extends TestCase
         $calendar = $generator->createCalendarObject( new TaskSpec(
             ['Alice', 'Bob', 'Carol' ],
             new DateTime( '2017-10-14' ),
-            Duration::Weekends,
+            Duration::Weekend,
             $end
         ) );
         $this->assertEventsHaveProperty( 'DTEND', $end->format( self::VCS_TIMESTAMP ), $calendar );

@@ -12,8 +12,8 @@ class Duration
     const Week = 2;
     const Month = 3;
     const Year = 4;
-    const Weekdays = 5;
-    const Weekends = 6;
+    const Workweek = 5;
+    const Weekend = 6;
 
     public static function getIntervalFromDuration( int $duration ): \DateInterval
     {
@@ -22,8 +22,8 @@ class Duration
             self::Week => 'P1W',
             self::Month => 'P1M',
             self::Year => 'P1Y',
-            self::Weekdays => 'P1W',
-            self::Weekends => 'P1W'
+            self::Workweek => 'P1W',
+            self::Weekend => 'P1W'
         ];
         if ( empty( $map[$duration] ) ) {
             throw new InvalidArgumentException( 'Unknown duration' );
@@ -38,8 +38,8 @@ class Duration
             self::Week => 'P1W',
             self::Month => 'P1M',
             self::Year => 'P1Y',
-            self::Weekdays => 'P5D',
-            self::Weekends => 'P2D'
+            self::Workweek => 'P5D',
+            self::Weekend => 'P2D'
         ];
         if ( empty( $map[$duration] ) ) {
             throw new InvalidArgumentException( 'Unknown duration' );

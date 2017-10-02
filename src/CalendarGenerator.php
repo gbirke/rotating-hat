@@ -32,10 +32,10 @@ class CalendarGenerator
 
     private function getStartDate( TaskSpec $taskSpec )
     {
-        if ( $taskSpec->getDuration() === Duration::Weekdays && !$this->taskStartsOnMonday( $taskSpec ) ) {
+        if ( $taskSpec->getDuration() === Duration::Workweek && !$this->taskStartsOnMonday( $taskSpec ) ) {
             throw new \InvalidArgumentException( 'Weekday tasks must start on Monday' );
         }
-        if ( $taskSpec->getDuration() === Duration::Weekends && !$this->taskStartsOnSaturday( $taskSpec ) ) {
+        if ( $taskSpec->getDuration() === Duration::Weekend && !$this->taskStartsOnSaturday( $taskSpec ) ) {
             throw new \InvalidArgumentException( 'Weekend tasks must start on Saturday' );
         }
         return $startDate = $taskSpec->getStartDate();
