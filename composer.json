@@ -1,0 +1,22 @@
+{
+    "name": "gbirke/task-hat",
+    "description": "Application to distribute a recurring task among people",
+    "license": "GPL2",
+    "authors": [
+        {
+            "name": "Gabriel Birke",
+            "email": "gabriel.birke@gmail.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Gbirke\\TaskHat\\": "src/"
+        }
+    },
+    "require": {
+        "sabre/vobject": "^4.0"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^6.3"
+    }
+}
