@@ -44,10 +44,13 @@ $app->post( '/create-calendar', function (Application $app, Request $request ) {
         return $app['twig']->render( 'form.twig', [ 'errors' => $errors ] );
 
     } else {
-        $prefix = $request->request->get('name');
+        $prefix = trim( $request->request->get('name') );
+        error_log("prefix=$prefix");
+        $prefix = $prefix ? $prefix . ': ' : '';
+        error_log("pureprefix=$prefix");
         $labels = array_filter( array_map( function($name) use ($prefix) {
             $name = trim($name);
-            return $name ? $prefix.': '.$name : '';
+            return $name ? $prefix.$name : '';
         }, explode( "\n", $request->get('people'))));
 
         $startOn = new DateTime(
