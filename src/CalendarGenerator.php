@@ -2,9 +2,7 @@
 
 namespace Gbirke\TaskHat;
 
-use DateInterval;
 use Sabre\VObject\Component\VCalendar;
-use Sabre\VObject\Component\VEvent;
 
 class CalendarGenerator
 {
@@ -28,21 +26,23 @@ class CalendarGenerator
 
     private function getStartDate( TaskSpec $taskSpec )
     {
-        if ( $taskSpec->getDuration() === Duration::Weekdays ) {
-            return $this->getCurrentOrPreviousMonday( $taskSpec->getStartDate() );
-        } else {
-            return $startDate = $taskSpec->getStartDate();
+        if ( $taskSpec->getDuration() === Duration::Weekdays && !$this->taskStartsOnMonday( $taskSpec ) ) {
+            throw new \InvalidArgumentException( 'Weekday tasks must start on Monday' );
         }
+        if ( $taskSpec->getDuration() === Duration::Weekends && !$this->taskStartsOnSaturday( $taskSpec ) ) {
+            throw new \InvalidArgumentException( 'Weekend tasks must start on Saturday' );
+        }
+        return $startDate = $taskSpec->getStartDate();
     }
 
-    private function getCurrentOrPreviousMonday( \DateTime $startDate )
+    private function taskStartsOnMonday( TaskSpec $taskSpec): bool
     {
-        $dayOfWeek = (int) $startDate->format('N');
-        if ( $dayOfWeek === 1 ) {
-            return $startDate;
-        } else {
-            return ( clone $startDate )->modify('-' . ( $dayOfWeek - 1 ) . 'days' );
-        }
+        return $taskSpec->getStartDate()->format( 'N' ) === '1';
+    }
+
+    private function taskStartsOnSaturday( TaskSpec$taskSpec ): bool
+    {
+        return $taskSpec->getStartDate()->format( 'N' ) === '6';
     }
 
 

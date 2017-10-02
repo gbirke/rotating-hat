@@ -91,15 +91,33 @@ class CalendarGeneratorTest extends TestCase
         $this->assertDateTimeMatches( new DateTime( '2017-10-23' ), $events[2]->DTSTART->getValue() );
     }
 
-    public function testGivenWeekdayDurationStartingOnTuesday_eventsStartOnMondayOneWeekAfterEachOther() {
+    /**
+     * @expectedException InvalidArgumentException
+     */
+    public function testGivenWeekdayDurationStartingOnTuesday_exceptionIsThrown() {
         $generator = new CalendarGenerator();
         $start = new DateTime( '2017-10-10' );
-        $calendar = $generator->createCalendarObject( new TaskSpec(['Alice', 'Bob', 'Carol' ], $start, Duration::Weekdays ) );
-        $events = $calendar->getBaseComponents( 'VEVENT' );
-        $this->assertDateTimeMatches( new DateTime( '2017-10-09' ), $events[0]->DTSTART->getValue() );
-        $this->assertDateTimeMatches( new DateTime( '2017-10-16' ), $events[1]->DTSTART->getValue() );
-        $this->assertDateTimeMatches( new DateTime( '2017-10-23' ), $events[2]->DTSTART->getValue() );
+        $generator->createCalendarObject( new TaskSpec(['Alice', 'Bob', 'Carol' ], $start, Duration::Weekdays ) );
     }
+
+    public function testGivenWeekendDuration_eventStartOneWeekAfterEachOther() {
+        $generator = new CalendarGenerator();
+        $start = new DateTime( '2017-10-14' );
+        $calendar = $generator->createCalendarObject( new TaskSpec(['Alice', 'Bob', 'Carol' ], $start, Duration::Weekends ) );
+        $events = $calendar->getBaseComponents( 'VEVENT' );
+        $this->assertDateTimeMatches( new DateTime( '2017-10-21' ), $events[1]->DTSTART->getValue() );
+        $this->assertDateTimeMatches( new DateTime( '2017-10-28' ), $events[2]->DTSTART->getValue() );
+    }
+
+    /**
+     * @expectedException InvalidArgumentException
+     */
+    public function testGivenWeekendDurationStartingOnTuesday_exceptionIsThrown() {
+        $generator = new CalendarGenerator();
+        $start = new DateTime( '2017-10-10' );
+        $generator->createCalendarObject( new TaskSpec(['Alice', 'Bob', 'Carol' ], $start, Duration::Weekends ) );
+    }
+
 
 
     private function assertDateTimeMatches( DateTime $expectedTime, string $value ) {
