@@ -82,6 +82,26 @@ class CalendarGeneratorTest extends TestCase
         $this->assertDateTimeMatches( new DateTime( '2019-10-09' ), $events[2]->DTSTART->getValue() );
     }
 
+    public function testGivenWeekdayDuration_eventStartOneWeekAfterEachOther() {
+        $generator = new CalendarGenerator();
+        $start = new DateTime( '2017-10-09' );
+        $calendar = $generator->createCalendarObject( new TaskSpec(['Alice', 'Bob', 'Carol' ], $start, Duration::Weekdays ) );
+        $events = $calendar->getBaseComponents( 'VEVENT' );
+        $this->assertDateTimeMatches( new DateTime( '2017-10-16' ), $events[1]->DTSTART->getValue() );
+        $this->assertDateTimeMatches( new DateTime( '2017-10-23' ), $events[2]->DTSTART->getValue() );
+    }
+
+    public function testGivenWeekdayDurationStartingOnTuesday_eventsStartOnMondayOneWeekAfterEachOther() {
+        $generator = new CalendarGenerator();
+        $start = new DateTime( '2017-10-10' );
+        $calendar = $generator->createCalendarObject( new TaskSpec(['Alice', 'Bob', 'Carol' ], $start, Duration::Weekdays ) );
+        $events = $calendar->getBaseComponents( 'VEVENT' );
+        $this->assertDateTimeMatches( new DateTime( '2017-10-09' ), $events[0]->DTSTART->getValue() );
+        $this->assertDateTimeMatches( new DateTime( '2017-10-16' ), $events[1]->DTSTART->getValue() );
+        $this->assertDateTimeMatches( new DateTime( '2017-10-23' ), $events[2]->DTSTART->getValue() );
+    }
+
+
     private function assertDateTimeMatches( DateTime $expectedTime, string $value ) {
         $this->assertSame( $expectedTime->format( 'Ymd\THis\Z' ), $value );
     }

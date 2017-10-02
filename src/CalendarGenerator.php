@@ -14,7 +14,7 @@ class CalendarGenerator
         }
         $cal = new VCalendar();
 
-        $startDate = $spec->getStartDate();
+        $startDate = $this->getStartDate( $spec );
         $interval = Duration::getIntervalFromDuration( $spec->getDuration() );
         foreach( $spec->getNames() as $name ) {
             $cal->add( 'VEVENT', [
@@ -24,6 +24,25 @@ class CalendarGenerator
             $startDate = (clone $startDate)->add( $interval );
         }
         return $cal;
+    }
+
+    private function getStartDate( TaskSpec $taskSpec )
+    {
+        if ( $taskSpec->getDuration() === Duration::Weekdays ) {
+            return $this->getCurrentOrPreviousMonday( $taskSpec->getStartDate() );
+        } else {
+            return $startDate = $taskSpec->getStartDate();
+        }
+    }
+
+    private function getCurrentOrPreviousMonday( \DateTime $startDate )
+    {
+        $dayOfWeek = (int) $startDate->format('N');
+        if ( $dayOfWeek === 1 ) {
+            return $startDate;
+        } else {
+            return ( clone $startDate )->modify('-' . ( $dayOfWeek - 1 ) . 'days' );
+        }
     }
 
 
