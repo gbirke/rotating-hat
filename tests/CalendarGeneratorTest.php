@@ -156,16 +156,33 @@ class CalendarGeneratorTest extends TestCase
         $this->assertEventsHaveProperty( 'DURATION', 'P2D', $calendar );
     }
 
+    /**
+     * @dataProvider recurrenceProvider
+     */
+    public function testAllEventsAreRecuringWithTheGivenRecurrence( $duration, $expectedRecurrenceString ) {
+        $generator = new CalendarGenerator();
+        $calendar = $generator->createCalendarObject( new TaskSpec(['Alice', 'Bob', 'Carol' ], new DateTime( '2017-10-14' ), $duration ) );
+        $this->assertEventsHaveProperty( 'RRULE', $expectedRecurrenceString, $calendar );
+    }
+
+    public function recurrenceProvider(): \Iterator {
+        yield [Duration::Day, 'FREQ=DAILY;INTERVAL=3'];
+        yield [Duration::Week, 'FREQ=WEEKLY;INTERVAL=3'];
+        yield [Duration::Month, 'FREQ=MONTHLY;INTERVAL=3'];
+        yield [Duration::Year, 'FREQ=YEARLY;INTERVAL=3'];
+    }
+
     public function testWhenEndDateIsGiven_allEventsEndOnThatDay() {
         $generator = new CalendarGenerator();
         $end = new DateTime( '2017-12-24' );
         $calendar = $generator->createCalendarObject( new TaskSpec(
-            ['Alice', 'Bob', 'Carol' ],
+            ['Alice', 'Bob' ],
             new DateTime( '2017-10-14' ),
-            Duration::Weekend,
+            Duration::Day,
             $end
         ) );
-        $this->assertEventsHaveProperty( 'DTEND', $end->format( self::VCS_TIMESTAMP ), $calendar );
+        $expectedRecurrence = 'FREQ=DAILY;INTERVAL=2;UNTIL=20171224T000000Z';
+        $this->assertEventsHaveProperty( 'RRULE', $expectedRecurrence, $calendar );
     }
 
     private function assertDateTimeMatches( DateTime $expectedTime, string $value ) {

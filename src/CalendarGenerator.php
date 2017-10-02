@@ -3,6 +3,8 @@
 namespace Gbirke\TaskHat;
 
 use Sabre\VObject\Component\VCalendar;
+use Sabre\VObject\Property\ICalendar\Date;
+use Sabre\VObject\Property\ICalendar\Recur;
 
 class CalendarGenerator
 {
@@ -14,16 +16,15 @@ class CalendarGenerator
 
         $startDate = $this->getStartDate( $spec );
         $interval = Duration::getIntervalFromDuration( $spec->getDuration() );
-        foreach($spec->getLabels() as $name ) {
+        $recurrence = $this->getRecurrence( $spec );
+        foreach($spec->getLabels() as $label ) {
             $event = [
-                'SUMMARY' => $name,
+                'SUMMARY' => $label,
                 'DTSTART' => $startDate,
-                'DURATION' => Duration::getDurationSpec( $spec->getDuration() )
+                'DURATION' => Duration::getDurationSpec( $spec->getDuration() ),
+                'RRULE' => $recurrence
             ];
-            $endDate = $spec->getEndDate();
-            if ( !is_null( $endDate ) ) {
-                $event['DTEND'] = $endDate;
-            }
+
             $cal->add( 'VEVENT', $event );
             $startDate = (clone $startDate)->add( $interval );
         }
@@ -49,6 +50,26 @@ class CalendarGenerator
     private function taskStartsOnSaturday( TaskSpec$taskSpec ): bool
     {
         return $taskSpec->getStartDate()->format( 'N' ) === '6';
+    }
+
+    private function getRecurrence( TaskSpec $spec ): array
+    {
+        $durationMap = [
+            Duration::Day => 'DAILY',
+            Duration::Week => 'WEEKLY',
+            Duration::Month => 'MONTHLY',
+            Duration::Year => 'YEARLY',
+            Duration::Workweek => 'WEEKLY',
+            Duration::Weekend => 'WEEKLY'
+        ];
+        $recurrence = [
+            'FREQ' => $durationMap[$spec->getDuration()],
+            'INTERVAL' => count( $spec->getLabels() )
+        ];
+        if ( $spec->getEndDate() ) {
+            $recurrence['UNTIL'] = $spec->getEndDate()->format( 'Ymd\THis\Z' );
+        }
+        return $recurrence;
     }
 
 
