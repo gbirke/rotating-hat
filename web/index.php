@@ -49,11 +49,12 @@ $app->post( '/create-calendar', function (Application $app, Request $request ) {
             )
         );
 
-        $startOn = new DateTime( $data['startOn']->format( 'Y-m-d' ), new DateTimeZone( $data['startOnTimezone'] ) );
+        $timezone = new DateTimeZone( $data['timezone'] ?: $data['userTimezone'] );
+        $startOn = new DateTime( $data['startOn']->format( 'Y-m-d' ), $timezone );
         $recurrence = Recurrence::newOnce();
         switch ( (int) $data['recurrence'] ) {
             case Recurrence::UNTIL:
-                $recurrence = Recurrence::newUntil( new DateTime( $data['endDate']->format('Y-m-d'), $startOn->getTimezone() ) );
+                $recurrence = Recurrence::newUntil( new DateTime( $data['endDate']->format('Y-m-d'), $timezone ) );
                 break;
             case Recurrence::FOREVER:
                 $recurrence = Recurrence::newForever();
