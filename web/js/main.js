@@ -8,13 +8,16 @@ $(function () {
         }
     });
 
-    var clientTimezone;
+    var clientTimezone = '';
     try {
         clientTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
     } catch (e) {
-        clientTimezone = 'Europe/Berlin';
+        clientTimezone = '';
     }
-    if ( $('#task_timezone option[value="'+clientTimezone+'"]' ).length > 0 ) {
-        $('#task_timezone').val(clientTimezone);
+    if ( typeof clientTimezone !== 'undefined' && clientTimezone.length > 0 ) {
+        $('#timezone').val(clientTimezone);
+    } else {
+        $('#timezone_select_row').show();
     }
+
 });

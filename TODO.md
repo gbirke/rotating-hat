@@ -1,9 +1,9 @@
 # Next Steps
 
 ## MVP
-- [ ] Proper Timezone selection
 - [ ] Add CI
 - [ ] Help texts
+- [X] Proper Timezone selection
 - [X] Date Picker
 - [X] Layout form in columns
 - [X] Select box for recurrence: Once (just generate one event for each person), Until ... (Show field for end date ), Forever
