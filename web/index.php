@@ -28,7 +28,7 @@ $app->post( '/create-calendar', function (Application $app, Request $request ) {
             new Assert\NotBlank(),
             new Assert\Regex( ['pattern' => '/\w+\r?\n\w+/', 'message' => 'You must specify at least 2 names' ])
         ],
-        // TOOD check allowed values
+        // TODO check allowed values
         'duration' => new Assert\Optional( new Assert\NotBlank() ),
         'startOn' => [
             new Assert\NotBlank(),
@@ -38,6 +38,11 @@ $app->post( '/create-calendar', function (Application $app, Request $request ) {
             new Assert\NotBlank(),
             // Todo validate timezone options
         ],
+        'recurrence' => [
+            new Assert\NotBlank(),
+            // TODO validate recurrence options
+        ],
+        'endDate' => new Assert\Optional( new Assert\Date() ),
     ]] );
     $errors = $app['validator']->validate( $request->request->all(), $newTaskConstraints );
 
@@ -47,16 +52,30 @@ $app->post( '/create-calendar', function (Application $app, Request $request ) {
     } else {
         $prefix = trim( $request->request->get('name') );
         $prefix = $prefix ? $prefix . ': ' : '';
-        $labels = array_filter( array_map( function($name) use ($prefix) {
-            $name = trim($name);
-            return $name ? $prefix.$name : '';
-        }, explode( "\n", $request->get('people'))));
+        $labels = array_filter(
+            array_map(
+                function($name) use ($prefix) {
+                    $name = trim($name);
+                    return $name ? $prefix.$name : '';
+                    },
+                explode( "\n", $request->get('people') )
+            )
+        );
 
         $startOn = new DateTime(
             $request->get('startOn' ),
             new DateTimeZone( $request->get( 'startOnTimezone' ) )
         );
-        $spec = new TaskSpec( $labels, $startOn, (int) $request->get('duration'), Recurrence::newOnce() );
+        $recurrence = Recurrence::newOnce();
+        switch ( $request->get('recurrence') ) {
+            case '2':
+                $recurrence = Recurrence::newUntil( new DateTime( $request->get( 'endDate'), $startOn->getTimezone() ) );
+                break;
+            case '3':
+                $recurrence = Recurrence::newForever();
+        }
+
+        $spec = new TaskSpec( $labels, $startOn, (int) $request->get('duration'), $recurrence );
         $generator = new \Gbirke\TaskHat\CalendarGenerator();
         $calendar = $generator->createCalendarObject( $spec );
         return new Response( $calendar->serialize(), Response::HTTP_OK, [

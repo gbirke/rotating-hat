@@ -16,7 +16,7 @@
             <div class="form-group">
                 <label class="control-label" for="name">Name of the task</label>
 
-                <input class="form-control" id="name" name="name" placeholder="Employee of the day">
+                <input class="form-control" id="name" name="name" placeholder="Hero of the day">
             </div>
 
             <div class="form-group">
@@ -48,6 +48,17 @@
 
                     <!-- TODO proper timezone selection -->
                 </select>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label" for="recurrence">Repeat</label>
+
+                <select class="form-control" name="recurrence" id="recurrence">
+                    <option value="1">Once</option>
+                    <option value="3">Forever</option>
+                    <option value="2">Until ...</option>
+                </select>
+                <input class="form-control" id="endDate" name="endDate" value="" style="display:none" />
             </div>
 
             <button type="submit" class="btn">Get Calendar file</button>

@@ -6,7 +6,7 @@
 - [ ] Proper Timezone selection
 - [ ] Add CI
 - [ ] Help texts
-- [ ] Select box for recurrence: Once (just generate one event for each person), Until ... (Show field for end date ), Forever
+- [X] Select box for recurrence: Once (just generate one event for each person), Until ... (Show field for end date ), Forever
 - [X] Improve label handling (concat with colon only if not empty)
 
 ## Later
