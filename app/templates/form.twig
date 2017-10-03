@@ -48,8 +48,13 @@
 
 
                 <div class="col-sm-4">
-                    <input class="form-control" id="startOn" name="startOn"
-                           value="{{ "now"|date("Y-m-d") }}"/></div><div class="col-sm-4">
+                    <input class="form-control" id="startOn" name="startOn" data-provide="datepicker"
+                           placeholder="YYYY-MM-DD"
+                           data-date-start-date="-1y"
+                           data-date-format="yyyy-mm-dd"
+                           value="{{ "now"|date("Y-m-d") }}"/>
+                </div>
+                <div class="col-sm-4">
                     <select class="form-control" name="startOnTimezone" id="startOnTimezone">
                         <option value="Europe/Berlin">Europe/Berlin</option>
                         <option value="UTC">UTC</option>
@@ -68,7 +73,11 @@
                         <option value="3">Forever</option>
                         <option value="2">Until ...</option>
                     </select>
-                    <input class="form-control" id="endDate" name="endDate" value="" style="display:none"/>
+                    <input class="form-control" id="endDate" name="endDate" value="" data-provide="datepicker"
+                           placeholder="YYYY-MM-DD"
+                           data-date-start-date="-1y"
+                           data-date-format="yyyy-mm-dd"
+                           style="display:none"/>
                 </div>
             </div>
 
