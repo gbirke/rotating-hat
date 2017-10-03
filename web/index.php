@@ -4,7 +4,7 @@ use Gbirke\TaskHat\TaskSpec;
 use Silex\Application;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Validator\Constraints as Assert;
+use Silex\Provider\FormServiceProvider;
 
 require_once __DIR__.'/../vendor/autoload.php';
 
@@ -20,62 +20,46 @@ $app->register( new Silex\Provider\TwigServiceProvider(), array(
     'twig.path' => __DIR__.'/../app/templates',
 ));
 $app->register(new Silex\Provider\ValidatorServiceProvider());
+$app->register(new FormServiceProvider());
+$app->register(new Silex\Provider\TranslationServiceProvider(), array(
+    'translator.domains' => array(),
+    'locale' =>'en_US'
+));
 
 $app->post( '/create-calendar', function (Application $app, Request $request ) {
-    $newTaskConstraints = new Assert\Collection(['fields' => [
-        'name' => new Assert\Optional( new Assert\NotBlank() ),
-        'people' => [
-            new Assert\NotBlank(),
-            new Assert\Regex( ['pattern' => '/\w+\r?\n\w+/', 'message' => 'You must specify at least 2 names' ])
-        ],
-        // TODO check allowed values
-        'duration' => new Assert\Optional( new Assert\NotBlank() ),
-        'startOn' => [
-            new Assert\NotBlank(),
-            new Assert\Date()
-        ],
-        'startOnTimezone' => [
-            new Assert\NotBlank(),
-            // Todo validate timezone options
-        ],
-        'recurrence' => [
-            new Assert\NotBlank(),
-            // TODO validate recurrence options
-        ],
-        'endDate' => new Assert\Optional( new Assert\Date() ),
-    ]] );
-    $errors = $app['validator']->validate( $request->request->all(), $newTaskConstraints );
+    /** @var \Symfony\Component\Form\Form $form */
+    $form = $app['form.factory']->createBuilder(\Gbirke\TaskHat\Form\Task::class, [
+        'startOn' => new DateTime()
+    ] )->getForm();
+    $form->handleRequest( $request );
 
-    if (count($errors) > 0) {
-        return $app['twig']->render( 'form.twig', [ 'errors' => $errors ] );
+    if (!$form->isValid()) {
+        return $app['twig']->render( 'form.twig', [ 'form' => $form->createView() ] );
 
     } else {
-        $prefix = trim( $request->request->get('name') );
-        $prefix = $prefix ? $prefix . ': ' : '';
+        $data = $form->getData();
+        $prefix = empty( $data['name'] ) ?  '' : $data['name'] . ': ';
         $labels = array_filter(
             array_map(
                 function($name) use ($prefix) {
                     $name = trim($name);
                     return $name ? $prefix.$name : '';
                     },
-                explode( "\n", $request->get('people') )
+                explode( "\n", $data['people'] )
             )
         );
 
-        $startOn = new DateTime(
-            $request->get('startOn' ),
-            new DateTimeZone( $request->get( 'startOnTimezone' ) )
-        );
+        $startOn = new DateTime( $data['startOn']->format( 'Y-m-d' ), new DateTimeZone( $data['startOnTimezone'] ) );
         $recurrence = Recurrence::newOnce();
-        switch ( $request->get('recurrence') ) {
-            case '2':
-                $recurrence = Recurrence::newUntil( new DateTime( $request->get( 'endDate'), $startOn->getTimezone() ) );
+        switch ( (int) $data['recurrence'] ) {
+            case Recurrence::UNTIL:
+                $recurrence = Recurrence::newUntil( new DateTime( $data['endDate']->format('Y-m-d'), $startOn->getTimezone() ) );
                 break;
-            case '3':
+            case Recurrence::FOREVER:
                 $recurrence = Recurrence::newForever();
         }
 
-        $spec = new TaskSpec( $labels, $startOn, (int) $request->get('duration'), $recurrence );
+        $spec = new TaskSpec( $labels, $startOn, (int) $data['duration'], $recurrence );
         $generator = new \Gbirke\TaskHat\CalendarGenerator();
         $calendar = $generator->createCalendarObject( $spec );
         return new Response( $calendar->serialize(), Response::HTTP_OK, [
@@ -86,7 +70,11 @@ $app->post( '/create-calendar', function (Application $app, Request $request ) {
 } );
 
 $app->get( '/', function ( Application $app )  {
-    return $app['twig']->render( 'form.twig' );
+    /** @var \Symfony\Component\Form\Form $form */
+    $form = $app['form.factory']->createBuilder(\Gbirke\TaskHat\Form\Task::class, [
+        'startOn' => new DateTime()
+    ] )->getForm();
+    return $app['twig']->render( 'form.twig', [ 'form' => $form->createView() ] );
 } );
 
 $app->run();

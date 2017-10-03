@@ -8,15 +8,13 @@
 <div class="row">
     <div class="col-lg-6">
         <form role="form" action="/create-calendar" method="post">
-            {% if errors is defined %}
-                <ul style="color:red">
-                    {% for e in errors %}<li>{{ e.propertyPath }}: {{ e.message }}</li>{% endfor %}
-                </ul>
-            {% endif %}
             <div class="form-group form-row">
                 <label class="control-label col-sm-4" for="name">Name of the task</label>
 
-                <div class="col-sm-8"><input class="form-control" id="name" name="name" placeholder="Hero of the day"></div>
+                <div class="col-sm-8">
+                    {{ form_widget( form.name, { 'attr':{ 'class': 'form-control', 'placeholder': 'Hero of the day' } } ) }}
+                    {{ form_errors( form.name ) }}
+                </div>
             </div>
 
             <div class="form-group form-row">
@@ -24,8 +22,9 @@
 
 
                 <div class="col-sm-8">
-                    <textarea class="form-control" name="people" id="people" rows="5"></textarea>
+                    {{ form_widget( form.people, { 'attr':{ 'class': 'form-control', 'rows': 5 } } ) }}
                     <small class="form-text text-muted">One name per line, at least 2 names</small>
+                    {{ form_errors( form.people ) }}
                 </div>
             </div>
 
@@ -33,13 +32,9 @@
                 <label class="control-label col-sm-4" for="duration">Duration of the task</label>
 
                 <div class="col-sm-8">
-                    <select class="form-control" name="duration" id="duration">
-                        <option value="1">1 Day</option>
-                        <option value="2">1 Week</option>
-                        <option value="3">1 Month</option>
-                        <option value="4">1 Year</option>
-                        <!-- TODO custom selection -->
-                    </select>
+                    {{ form_widget( form.duration, { 'attr':{ 'class': 'form-control' } } ) }}
+                    <!-- TODO custom selection -->
+                    {{ form_errors( form.duration ) }}
                 </div>
             </div>
 
@@ -48,36 +43,36 @@
 
 
                 <div class="col-sm-4">
-                    <input class="form-control" id="startOn" name="startOn" data-provide="datepicker"
-                           placeholder="YYYY-MM-DD"
-                           data-date-start-date="-1y"
-                           data-date-format="yyyy-mm-dd"
-                           value="{{ "now"|date("Y-m-d") }}"/>
+                    {{ form_widget( form.startOn, { 'attr': {
+                        'class': 'form-control',
+                        'placeholer': 'YYYY-MM-DD',
+                        'data-provide': 'datepicker',
+                        'data-date-start-date': "-1y",
+                        'data-date-format': "yyyy-mm-dd"
+                    } } ) }}
                 </div>
                 <div class="col-sm-4">
-                    <select class="form-control" name="startOnTimezone" id="startOnTimezone">
-                        <option value="Europe/Berlin">Europe/Berlin</option>
-                        <option value="UTC">UTC</option>
-
-                        <!-- TODO proper timezone selection -->
-                    </select>
+                    {{ form_widget( form.startOnTimezone, { 'attr':{ 'class': 'form-control' }, 'id':'task_timezone' } ) }}
                 </div>
+                {{ form_errors( form.startOn ) }}
+                {{ form_errors( form.startOnTimezone ) }}
             </div>
 
             <div class="form-group form-row">
                 <label class="control-label col-sm-4" for="recurrence">Repeat</label>
 
                 <div class="col-sm-8">
-                    <select class="form-control" name="recurrence" id="recurrence">
-                        <option value="1">Once</option>
-                        <option value="3">Forever</option>
-                        <option value="2">Until ...</option>
-                    </select>
-                    <input class="form-control" id="endDate" name="endDate" value="" data-provide="datepicker"
-                           placeholder="YYYY-MM-DD"
-                           data-date-start-date="-1y"
-                           data-date-format="yyyy-mm-dd"
-                           style="display:none"/>
+                    {{ form_widget( form.recurrence, { 'attr':{ 'class': 'form-control' } } ) }}
+                    {{ form_widget( form.endDate, { 'attr': {
+                        'class': 'form-control',
+                        'placeholer': 'YYYY-MM-DD',
+                        'data-provide': 'datepicker',
+                        'data-date-start-date': "-1y",
+                        'data-date-format': "yyyy-mm-dd",
+                        'style':'display:none'
+                    } } ) }}
+                    {{ form_errors( form.recurrence ) }}
+                    {{ form_errors( form.endDate ) }}
                 </div>
             </div>
 
