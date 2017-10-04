@@ -1,7 +1,6 @@
 # Next Steps
 
 ## MVP
-- [ ] Add CI
 - [ ] Help texts
 - [X] Proper Timezone selection
 - [X] Date Picker
@@ -11,8 +10,6 @@
 
 ## Later
 - [ ] Calendar+Schedule preview in right column (https://github.com/Serhioromano/bootstrap-calendar, plus https://github.com/simshaun/recurr for generating the dates on the server side)
-- [ ] Edge-to-Edge test
-- [ ] Build system for assets (Bootstrap, Date picker, custom JS and CSS, etc)
 - [ ] German translation
 - [ ] Store settings, provide URL to calendar, URL for calendar for each Person and special "Admin URL" for changing settings.
 - [ ] More flexible duration (input field for number instead of fixed to "1")
@@ -21,3 +18,7 @@
 - [ ] Hourly duration
 - [ ] Printable schedules
 
+## Technical improvements
+- [ ] Add CI
+- [ ] Edge-to-Edge test
+- [ ] Build system for assets (Bootstrap, Date picker, custom JS and CSS, etc)
