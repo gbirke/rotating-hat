@@ -58,20 +58,26 @@
                 <label class="control-label col-sm-4" for="recurrence">Repeat</label>
 
                 <div class="col-sm-8">
-                    {{ form_widget( form.recurrence, { 'attr':{ 'class': 'form-control' } } ) }}
+                    {{ form_widget( form.recurrence, { 'attr':{ 'class': 'form-control js-recurrence' } } ) }}
+                    {{ form_errors( form.recurrence ) }}
+                    {{ form_errors( form.endDate ) }}
+                </div>
+            </div>
+            <div class="form-group form-row js-end_date_row" style="display: none">
+                <label class="control-label col-sm-4" for="end_date">Repeat until ...</label>
+
+                <div class="col-sm-8">
                     {{ form_widget( form.endDate, { 'attr': {
                         'class': 'form-control',
                         'placeholer': 'YYYY-MM-DD',
                         'data-provide': 'datepicker',
                         'data-date-start-date': "-1y",
                         'data-date-format': "yyyy-mm-dd",
-                        'style':'display:none'
                     } } ) }}
-                    {{ form_errors( form.recurrence ) }}
                     {{ form_errors( form.endDate ) }}
                 </div>
             </div>
-            <div class="form-group form-row" id="timezone_select_row" style="display: none">
+            <div class="form-group form-row js-timezone_select_row" style="display: none">
                 <label class="control-label col-sm-4" for="timezone_select">Timezone</label>
 
 
@@ -80,7 +86,7 @@
                 </div>
 
                 {{ form_errors( form.userTimezone ) }}
-                {{ form_widget( form.timezone, {'id':'timezone'}) }}
+                {{ form_widget( form.timezone, { 'attr': { 'class': 'js-timezone' } } ) }}
             </div>
 
             <button type="submit" class="btn">Get Calendar file</button>

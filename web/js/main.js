@@ -1,6 +1,6 @@
 $(function () {
-    $('#recurrence').change(function () {
-        var endDate = $('#endDate');
+    $('.js-recurrence').change(function () {
+        var endDate = $('.js-end_date_row');
         if ($(this).val() === '2' ) {
             endDate.show();
         } else {
@@ -15,9 +15,9 @@ $(function () {
         clientTimezone = '';
     }
     if ( typeof clientTimezone !== 'undefined' && clientTimezone.length > 0 ) {
-        $('#timezone').val(clientTimezone);
+        $('.js-timezone').val(clientTimezone);
     } else {
-        $('#timezone_select_row').show();
+        $('.js-timezone_select_row').show();
     }
 
 });
