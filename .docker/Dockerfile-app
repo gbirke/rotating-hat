@@ -1,0 +1,4 @@
+FROM php:7.1-fpm-alpine
+COPY .docker/log.conf /usr/local/etc/php-fpm.d/zz-log.conf
+COPY . /code
+
