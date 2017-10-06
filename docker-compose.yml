@@ -1,5 +1,7 @@
 version: '2'
 
+# Bring up a dev environment
+
 services:
     web:
         image: nginx:alpine
@@ -13,3 +15,8 @@ services:
         volumes:
             - .:/code
             - ./.docker/log.conf:/usr/local/etc/php-fpm.d/zz-log.conf
+    webpack:
+        image: jmfirth/webpack
+        volumes:
+          - .:/app
+        command: webpack --config /app/build/webpack.config.dev.js --watch
