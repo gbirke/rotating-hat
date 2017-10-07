@@ -14,7 +14,7 @@
 - [ ] Store settings, provide URL to calendar, URL for calendar for each Person and special "Admin URL" for changing settings.
 - [ ] More flexible duration (input field for number instead of fixed to "1")
 - [ ] Recur weekly, but only on some days (e.g. monday-friday)
-- [ ] Even more spread-out recurrence schemes (e.g. distribute task by-weekly)
+- [ ] Even more spread-out recurrence schemes (e.g. distribute task bi-weekly)
 - [ ] Hourly duration
 - [ ] Printable schedules
 
@@ -22,6 +22,6 @@
 - [ ] Add CI
 - [ ] Edge-to-Edge test
 - Webpack:
-    - [ ] Uglify production build
     - [ ] Use `extract-loader` for CSS
     - [ ] Enable auto-reloading on dev (--watch + browsersync)
+    - [X] Uglify production build
