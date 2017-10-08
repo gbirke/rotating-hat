@@ -63,7 +63,7 @@ const productionConfig = merge([
 			new UglifyJSPlugin()
 		]
 	},
-    parts.loadCSS()
+    parts.extractCSS({ use: 'css-loader'})
 ]);
 
 const developmentConfig = merge([

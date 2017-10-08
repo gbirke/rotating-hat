@@ -21,7 +21,4 @@
 ## Technical improvements
 - [ ] Add CI
 - [ ] Edge-to-Edge test
-- Webpack:
-    - [ ] Use `extract-loader` for CSS
-    - [ ] Enable auto-reloading on dev (--watch + browsersync)
-    - [X] Uglify production build
+- [X] Webpack for assets
