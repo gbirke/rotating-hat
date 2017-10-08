@@ -19,4 +19,4 @@ services:
         image: jmfirth/webpack
         volumes:
           - .:/app
-        command: webpack --config /app/build/webpack.config.dev.js --watch
+        command: webpack --watch
