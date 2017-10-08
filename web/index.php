@@ -2,6 +2,7 @@
 use Gbirke\TaskHat\Recurrence;
 use Gbirke\TaskHat\TaskSpec;
 use Silex\Application;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Silex\Provider\FormServiceProvider;
@@ -34,6 +35,7 @@ $app->post( '/create-calendar', function (Application $app, Request $request ) {
     $form->handleRequest( $request );
 
     if (!$form->isValid()) {
+        // TODO return JSON error object when Accept header is json
         return $app['twig']->render( 'form.twig', [ 'form' => $form->createView() ] );
 
     } else {
@@ -62,12 +64,22 @@ $app->post( '/create-calendar', function (Application $app, Request $request ) {
 
         $spec = new TaskSpec( $labels, $startOn, (int) $data['duration'], $recurrence );
         $generator = new \Gbirke\TaskHat\CalendarGenerator();
-        $calendar = $generator->createCalendarObject( $spec );
-        return new Response( $calendar->serialize(), Response::HTTP_OK, [
-            'Content-Type' => 'text/calendar',
-            'Content-Disposition' =>'attachment; filename="tasks.ics"'
-        ] );
+        return $generator->createCalendarObject( $spec );
     }
+} );
+
+$app->view( function( \Sabre\VObject\Component\VCalendar $calendar, Request $request) use($app) {
+    $acceptHeader = $request->headers->get('Accept');
+    $bestFormat = $app['negotiator']->getBestFormat($acceptHeader, ['json'] );
+
+    if ('json' === $bestFormat) {
+        return new JsonResponse( $calendar->jsonSerialize(), Response::HTTP_OK, [], true );
+    }
+
+    return new Response( $calendar->serialize(), Response::HTTP_OK, [
+        'Content-Type' => 'text/calendar',
+        'Content-Disposition' =>'attachment; filename="tasks.ics"'
+    ] );
 } );
 
 $app->get( '/', function ( Application $app )  {
