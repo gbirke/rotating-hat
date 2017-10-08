@@ -49,21 +49,9 @@ const commonConfig = merge([
 							loader: 'sass-loader' // compiles SASS to CSS
 						}
 					]
-				},
-				{
-					test: /\.css$/,
-					use: [ 'style-loader', 'css-loader' ]
 				}
 			]
 		},
-		plugins: [
-			new webpack.ProvidePlugin({
-				$: 'jquery',
-				jQuery: 'jquery',
-				'window.jQuery': 'jquery',
-				Popper: ['popper.js', 'default']
-			})
-		]
 	},
 	parts.lintJavaScript({ include: PATHS.app }),
 ]);
@@ -75,12 +63,14 @@ const productionConfig = merge([
 			new UglifyJSPlugin()
 		]
 	},
+    parts.loadCSS()
 ]);
 
 const developmentConfig = merge([
 	{
 		devtool: 'inline-source-map'
 	},
+	parts.loadCSS()
 ]);
 
 module.exports = (env) => {
