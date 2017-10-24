@@ -1,4 +1,9 @@
 import $ from 'jquery';
+import Vue from 'vue';
+
+Vue.config.productionTip = false;
+
+import App from './App.vue';
 
 $(function () {
     $('.js-recurrence').change(function () {
@@ -45,5 +50,10 @@ $(function () {
             console.log( 'Server request failed', textStatus, errorThrown );
         } );
     } );
+
+    new Vue({
+        el: '#vuetest',
+        render: h => h(App),
+    });
 
 });

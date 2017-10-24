@@ -49,9 +49,23 @@ const commonConfig = merge([
 							loader: 'sass-loader' // compiles SASS to CSS
 						}
 					]
-				}
+				},
+                {
+                    test: /\.vue$/,
+                    loader: 'vue-loader',
+                    options: {
+                        loaders: {
+                        }
+                        // other vue-loader options go here
+                    }
+                },
 			]
 		},
+        resolve: {
+            alias: {
+                'vue$': 'vue/dist/vue.esm.js'
+            }
+        },
 		plugins: [
             new webpack.ProvidePlugin({
                 $: 'jquery',
