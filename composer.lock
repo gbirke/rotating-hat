@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "fa4b81d9ab214c7d536603735a964002",
-    "content-hash": "9a4c80a4c68a797e93dc52c9771198fc",
+    "hash": "b6e7da578bf3102be06808bbb0bd23de",
+    "content-hash": "d761eac47156e898cfe005f6bc25686a",
     "packages": [
         {
             "name": "paragonie/random_compat",
@@ -1753,6 +1753,58 @@
                 "templating"
             ],
             "time": "2017-09-27 18:10:31"
+        },
+        {
+            "name": "willdurand/negotiation",
+            "version": "v2.3.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/willdurand/Negotiation.git",
+                "reference": "03436ededa67c6e83b9b12defac15384cb399dc9"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/willdurand/Negotiation/zipball/03436ededa67c6e83b9b12defac15384cb399dc9",
+                "reference": "03436ededa67c6e83b9b12defac15384cb399dc9",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.4.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "~4.5"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "2.3-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Negotiation\\": "src/Negotiation"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "William Durand",
+                    "email": "will+git@drnd.me"
+                }
+            ],
+            "description": "Content Negotiation tools for PHP provided as a standalone library.",
+            "homepage": "http://williamdurand.fr/Negotiation/",
+            "keywords": [
+                "accept",
+                "content",
+                "format",
+                "header",
+                "negotiation"
+            ],
+            "time": "2017-05-14 17:21:12"
         }
     ],
     "packages-dev": [

@@ -12,6 +12,7 @@ use Gbirke\TaskHat\TaskSpec;
 use Sabre\VObject\Component\VCalendar;
 use Silex\Application;
 use Symfony\Component\Form\Form;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Twig_Environment;
@@ -29,10 +30,13 @@ class CalendarController
         $form->handleRequest( $request );
 
         if (!$form->isValid()) {
-            return $this->createErrorResponse( $form, $app['twig'] );
+            return $this->createErrorResponse( $form, $app['twig'], $request );
         } else {
             $generator = new CalendarGenerator();
-            return $this->createSuccessResponse( $generator->createCalendarObject( $this->getTaskSpecFromData( $form->getData() ) ) );
+            return $this->createSuccessResponse(
+                $generator->createCalendarObject( $this->getTaskSpecFromData( $form->getData() ) ),
+                $request
+            );
         }
     }
 
@@ -63,16 +67,28 @@ class CalendarController
         return new TaskSpec( $labels, $startOn, (int) $data['duration'], $recurrence );
     }
 
-    private function createSuccessResponse( VCalendar $calendar )
+    private function createSuccessResponse( VCalendar $calendar, Request $request )
     {
+        if ( $request->attributes->get('is_json', false ) ) {
+            return new JsonResponse( $calendar->jsonSerialize() , Response::HTTP_OK, [ 'Content-Type' => 'application/json' ] );
+        }
+
         return new Response( $calendar->serialize(), Response::HTTP_OK, [
             'Content-Type' => 'text/calendar',
             'Content-Disposition' =>'attachment; filename="tasks.ics"'
         ] );
     }
 
-    private function createErrorResponse( Form $form, Twig_Environment $twig )
+    private function createErrorResponse( Form $form, Twig_Environment $twig, Request $request )
     {
+        if ( $request->attributes->get('is_json', false ) ) {
+            $errors = [];
+            foreach( $form->getErrors( true ) as $error ) {
+                $errors[$error->getOrigin()->getName()] = $error->getMessage();
+            }
+            return new JsonResponse( [ 'errors' => $errors ], Response::HTTP_OK, [ 'Content-Type' => 'application/json' ] );
+        }
+
         return $twig->render( 'form.twig', [ 'form' => $form->createView() ] );
     }
 }

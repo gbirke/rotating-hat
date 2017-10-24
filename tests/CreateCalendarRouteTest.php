@@ -39,7 +39,50 @@ class CreateCalendarRouteTest extends TestCase
         $this->assertTrue( $client->getResponse()->isOk() );
         $this->assertContains('text/calendar', $client->getResponse()->headers->get('Content-Type') );
         $this->assertSame( 2, substr_count( $client->getResponse()->getContent(), 'BEGIN:VEVENT') );
+    }
 
+    public function testGivenCompleteParamsForJSON_aJSONCalendarIsReturned() {
+        $client = $this->createClient([ 'HTTP_ACCEPT' => 'application/json' ]);
+        $client->request(
+            'POST',
+            '/create-calendar',
+            [
+                'task' => [
+                    'name' => 'Test task',
+                    'people' => "Alice\nBob",
+                    'duration' => '1',
+                    'startOn' => '2017-01-02',
+                    'recurrence' => '1',
+                    'timezone' => 'Europe/Berlin'
+                ]
+            ]
+        );
+
+        $this->assertTrue( $client->getResponse()->isOk() );
+        $this->assertContains('application/json', $client->getResponse()->headers->get('Content-Type') );
+        $responseData = json_decode( $client->getResponse()->getContent() );
+        $this->assertNotNull( $responseData );
+        $this->assertEquals( 'vcalendar', $responseData[0] );
+    }
+
+    public function testGivenMissingParamsForJSON_aJSONErrorReturned() {
+        $client = $this->createClient([ 'HTTP_ACCEPT' => 'application/json' ]);
+        $client->request(
+            'POST',
+            '/create-calendar',
+            [
+                'task' => [
+                    'name' => 'Test task'
+                ]
+            ]
+        );
+
+        $this->assertTrue( $client->getResponse()->isOk() );
+        $this->assertContains('application/json', $client->getResponse()->headers->get('Content-Type') );
+        $responseData = json_decode( $client->getResponse()->getContent() );
+        $this->assertNotNull( $responseData );
+        $this->assertObjectHasAttribute( 'errors', $responseData );
+        $this->assertObjectHasAttribute( 'people', $responseData->errors );
     }
 
     private function createApplication() {
