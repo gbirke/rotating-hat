@@ -7,6 +7,9 @@ use Gbirke\TaskHat\TaskSpec;
 use PHPUnit\Framework\TestCase;
 use Sabre\VObject\Component\VCalendar;
 
+/**
+ * @covers Gbirke\TaskHat\CalendarGenerator
+ */
 class CalendarGeneratorTest extends TestCase
 {
     const VCS_TIMESTAMP = 'Ymd\THis\Z';
