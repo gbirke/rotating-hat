@@ -1,5 +1,5 @@
 <template>
-    <div id="test-app" class="card">
+    <div id="test-app" class="card" v-show="events.length > 0">
         <div class="card-body">
 
             <div class="event" v-for="event in events">
@@ -28,6 +28,8 @@
     </div>
 </template>
 <script>
+    import { EventBus } from './event-bus';
+
     export default {
         data () {
             return {
@@ -44,6 +46,18 @@
                     }
                 ]
             }
+        },
+        mounted() {
+            EventBus.$on( 'eventsLoaded', e => {
+                console.log('events loaded', e);
+                this.events = [
+                    {
+                        label: 'Events Deployer of the day',
+                        start: new Date( '2017-10-02'),
+                        end: new Date( '2017-11-07' )
+                    },
+                ]
+            } );
         }
     }
 </script>

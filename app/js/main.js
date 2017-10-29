@@ -13,6 +13,7 @@ Vue.filter( 'monthName', function( value ) {
 
 
 import App from './App.vue';
+import { EventBus } from './event-bus';
 
 $(function () {
     $('.js-recurrence').change(function () {
@@ -64,5 +65,7 @@ $(function () {
         el: '#vuetest',
         render: h => h(App),
     });
+
+    setTimeout( () => EventBus.$emit( 'eventsLoaded', {foo:'bars'} ), 5000);
 
 });
