@@ -11,8 +11,8 @@
                         {{event.start | monthName }}
                     </div>
                 </div>
-                <div class="event__label">
-                    {{event.label}}
+                <div class="event__summary">
+                    {{event.summary}}
                 </div>
                 <div class="event__date datebox bg-primary text-white">
                     <div class="datebox__day">
@@ -35,12 +35,12 @@
             return {
                 events: [
                     {
-                        label: 'First Deployer of the day',
+                        summary: 'First Deployer of the day',
                         start: new Date( '2017-10-02'),
                         end: new Date( '2017-11-07' )
                     },
                     {
-                        label: 'Second Deployer of the day',
+                        summary: 'Second Deployer of the day',
                         start: new Date( '2017-05-07'),
                         end: new Date( '2017-07-14' )
                     }
@@ -52,7 +52,7 @@
                 console.log('events loaded', e);
                 this.events = [
                     {
-                        label: 'Events Deployer of the day',
+                        summary: 'Events Deployer of the day',
                         start: new Date( '2017-10-02'),
                         end: new Date( '2017-11-07' )
                     },
@@ -74,7 +74,7 @@
         flex: 1;
     }
 
-    .event__label {
+    .event__summary {
         flex: 2;
         padding: 0.3em 1em;
         font-weight: bold;

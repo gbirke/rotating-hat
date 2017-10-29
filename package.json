@@ -41,6 +41,7 @@
     "bootstrap": "^4.0.0-beta",
     "bootstrap-datepicker": "^1.7.1",
     "jquery": "^3.2.1",
+    "luxon": "0.0.9",
     "popper.js": "^1.12.5",
     "vue": "^2.5.2"
   },
