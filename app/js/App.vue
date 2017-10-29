@@ -3,7 +3,7 @@
         <div class="card-body">
 
             <div class="event" v-for="event in events">
-                <div class="event__date datebox">
+                <div class="event__date datebox bg-primary text-white">
                     <div class="datebox__day">
                         {{event.start.getDate()}}
                     </div>
@@ -14,7 +14,7 @@
                 <div class="event__label">
                     {{event.label}}
                 </div>
-                <div class="event__date datebox">
+                <div class="event__date datebox bg-primary text-white">
                     <div class="datebox__day">
                         {{event.end.getDate()}}
                     </div>
@@ -66,11 +66,7 @@
         font-weight: bold;
         color: rgba(0,0,0,.66);
     }
-
-    .datebox {
-        background: #990000;
-        color: white;
-    }
+    
     .datebox__day {
         font-size: 2em;
         text-align: center;
