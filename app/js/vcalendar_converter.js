@@ -56,7 +56,7 @@ function repeatEvents( events, currentEvent ) {
 }
 
 function sortEventByDate( a, b ) {
-    return a.start == b.start ? 0 : a.start > b.start ? 1 : -1;
+    return a.start === b.start ? 0 : a.start > b.start ? 1 : -1;
 }
 
 class VCardConverter {

@@ -1,4 +1,4 @@
-import VCardConverter from '../vard_converter';
+import VCardConverter from '../vcalendar_converter';
 
 import { DateTime } from 'luxon';
 
