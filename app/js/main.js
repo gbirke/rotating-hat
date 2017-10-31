@@ -69,6 +69,4 @@ $(function () {
         render: h => h(App),
     });
 
-    setTimeout( () => EventBus.$emit( 'eventsLoaded', {foo:'bars'} ), 5000);
-
 });
