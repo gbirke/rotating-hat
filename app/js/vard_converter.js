@@ -1,4 +1,5 @@
 import { DateTime, Duration } from 'luxon';
+import { RRule } from 'rrule'
 
 function veventArrayToEventObject( vevent ) {
     const event = {};
@@ -17,12 +18,42 @@ function veventArrayToEventObject( vevent ) {
             const startProp = getProp( vevent, 'dtstart' );
             const start = DateTime.fromISO( startProp[3], { zone: startProp[1].tzid } );
             event.end = start.plus( Duration.fromISO( prop[3] ) ).toJSDate();
+            event.duration = prop[3];
             break;
         }
+            case 'rrule':
+                event.rrule = prop[3];
+                break;
         }
+
     } );
 
     return event;
+}
+
+function repeatEvents( events, currentEvent ) {
+    if ( typeof currentEvent.rrule !== 'object' ) {
+        events.push( currentEvent );
+        return events;
+    }
+    const ruleParams = {
+        freq: RRule.FREQUENCIES.indexOf( currentEvent.rrule.freq ),
+        interval: currentEvent.rrule.interval,
+        dtstart: currentEvent.start,
+    };
+    if ( typeof currentEvent.rrule.until !== 'undefined' ) {
+        ruleParams.until = currentEvent.rrule.until;
+    }
+
+    const rule = new RRule( ruleParams );
+    rule.all( ( date, i ) => i < 5 ).map( startDate => {
+        const newEvent = Object.assign( {}, currentEvent, {
+            start: startDate,
+            end: DateTime.fromJSDate( startDate ).plus( Duration.fromISO( currentEvent.duration ) ).toJSDate()
+        } );
+        events.push( newEvent );
+    } );
+    return events;
 }
 
 
@@ -49,7 +80,8 @@ class VCardConverter {
     getEvents() {
         return this.vcard[2]
             .filter( element => element[0] === 'vevent' )
-            .map( veventArrayToEventObject );
+            .map( veventArrayToEventObject )
+            .reduce( repeatEvents, [] );
     }
 }
 

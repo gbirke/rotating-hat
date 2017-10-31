@@ -1,7 +1,9 @@
 import VCardConverter from '../vard_converter';
 
 import { DateTime } from 'luxon';
+
 import single from './fixtures/vcard_repeat_once';
+import forever from './fixtures/vcard_repeat_forever';
 
 
 describe('VCardConverter checks the data format and throws exceptions', () => {
@@ -79,4 +81,45 @@ describe( 'Conversion to event object', () => {
             zone: 'CET',
         } ).toJSDate() );
     } );
+
+    describe( 'recurring vcalendar entries', () => {
+
+        test( 'it generates five events for each summary', () => {
+            const converter = new VCardConverter( forever );
+            const events = converter.getEvents();
+            expect( events ).toHaveLength(10);
+        } );
+
+        test( 'it generates the correct dates', () => {
+            const converter = new VCardConverter( forever );
+            const events = converter.getEvents();
+            expect( events[0].start ).toEqual( DateTime.fromObject( {
+                year: 2017,
+                month: 10,
+                day: 29,
+                zone: 'CET',
+            } ).toJSDate() );
+
+            expect( events[1].start ).toEqual( DateTime.fromObject( {
+                year: 2017,
+                month: 10,
+                day: 31,
+                zone: 'CET',
+            } ).toJSDate() );
+
+            expect( events[4].start ).toEqual( DateTime.fromObject( {
+                year: 2017,
+                month: 11,
+                day: 6,
+                zone: 'CET',
+            } ).toJSDate() );
+
+
+        } );
+
+
+    })
+
 } );
+
+
