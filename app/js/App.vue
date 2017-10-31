@@ -1,5 +1,6 @@
 <template>
     <div id="test-app" class="card" v-show="events.length > 0">
+        <div class="card-header">Preview</div>
         <div class="card-body">
 
             <div class="event" v-for="event in events">
@@ -33,30 +34,12 @@
     export default {
         data () {
             return {
-                events: [
-                    {
-                        summary: 'First Deployer of the day',
-                        start: new Date( '2017-10-02'),
-                        end: new Date( '2017-11-07' )
-                    },
-                    {
-                        summary: 'Second Deployer of the day',
-                        start: new Date( '2017-05-07'),
-                        end: new Date( '2017-07-14' )
-                    }
-                ]
+                events: []
             }
         },
         mounted() {
             EventBus.$on( 'eventsLoaded', e => {
-                console.log('events loaded', e);
-                this.events = [
-                    {
-                        summary: 'Events Deployer of the day',
-                        start: new Date( '2017-10-02'),
-                        end: new Date( '2017-11-07' )
-                    },
-                ]
+                this.events = e;
             } );
         }
     }

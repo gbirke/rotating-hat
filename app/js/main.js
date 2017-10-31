@@ -14,6 +14,7 @@ Vue.filter( 'monthName', function( value ) {
 
 import App from './App.vue';
 import { EventBus } from './event-bus';
+import VCalendarConverter from './vcalendar_converter';
 
 $(function () {
     $('.js-recurrence').change(function () {
@@ -49,12 +50,14 @@ $(function () {
             dataType: 'json',
             method: 'POST',
         } ).done( function( data ) {
-            // TODO:
-            // - check for error object
-            // - generate "events" (date, label) from jCalendar object
-            // - render events
-
-            console.log( 'received data', data);
+            let converter;
+            try {
+                converter = new VCalendarConverter( data );
+            } catch ( e ) {
+                EventBus.$emit( 'eventsLoaded', [] );
+                return;
+            }
+            EventBus.$emit( 'eventsLoaded', converter.getEvents() );
         }).fail( function( jqXHR, textStatus, errorThrown ) {
             // TODO show failure indicator?
             console.log( 'Server request failed', textStatus, errorThrown );
