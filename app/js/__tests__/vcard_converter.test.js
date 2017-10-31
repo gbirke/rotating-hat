@@ -90,7 +90,7 @@ describe( 'Conversion to event object', () => {
             expect( events ).toHaveLength(10);
         } );
 
-        test( 'it generates the correct dates', () => {
+        test( 'it generates the correct dates, interleaves summaries and sorts by date', () => {
             const converter = new VCardConverter( forever );
             const events = converter.getEvents();
             expect( events[0].start ).toEqual( DateTime.fromObject( {
@@ -99,26 +99,35 @@ describe( 'Conversion to event object', () => {
                 day: 29,
                 zone: 'CET',
             } ).toJSDate() );
+            expect( events[0].summary ).toBe( 'Daily Chores: Carol' );
 
             expect( events[1].start ).toEqual( DateTime.fromObject( {
+                year: 2017,
+                month: 10,
+                day: 30,
+                zone: 'CET',
+            } ).toJSDate() );
+            expect( events[1].summary ).toBe( 'Daily Chores: Dave' );
+
+            expect( events[2].start ).toEqual( DateTime.fromObject( {
                 year: 2017,
                 month: 10,
                 day: 31,
                 zone: 'CET',
             } ).toJSDate() );
+            expect( events[2].summary ).toBe( 'Daily Chores: Carol' );
 
-            expect( events[4].start ).toEqual( DateTime.fromObject( {
+
+            expect( events[9].start ).toEqual( DateTime.fromObject( {
                 year: 2017,
                 month: 11,
-                day: 6,
+                day: 7,
                 zone: 'CET',
             } ).toJSDate() );
-
-
+            expect( events[9].summary ).toBe( 'Daily Chores: Dave' );
         } );
 
-
-    })
+    });
 
 } );
 

@@ -3,7 +3,7 @@ const VCalendarForeverEvent = [
     [
         ['version', {}, 'text', '2.0'],
         ['prodid', {}, 'text', '-//Sabre//Sabre VObject 4.1.2//EN'],
-        ['calscale', {}, 'text', 'GREGORIAN']
+        ['calscale', {}, 'text', 'GREGORIAN'],
     ],
     [
         [
@@ -14,9 +14,9 @@ const VCalendarForeverEvent = [
                 ['summary', {}, 'text', 'Daily Chores: Carol'],
                 ['dtstart', {'tzid': 'CET'}, 'date-time', '2017-10-29T00:00:00'],
                 ['duration', {}, 'duration', 'P1D'],
-                ['rrule', {}, 'recur', {'freq': 'DAILY', 'interval': 2,} ]
+                ['rrule', {}, 'recur', {'freq': 'DAILY', 'interval': 2} ],
             ],
-            []
+            [],
         ],
         [
             'vevent',
@@ -26,11 +26,11 @@ const VCalendarForeverEvent = [
                 ['summary', {}, 'text', 'Daily Chores: Dave'],
                 ['dtstart', {'tzid': 'CET'}, 'date-time', '2017-10-30T00:00:00'],
                 ['duration', {}, 'duration', 'P1D'],
-                ['rrule', {}, 'recur', {'freq': 'DAILY', 'interval': 2,} ]
+                ['rrule', {}, 'recur', {'freq': 'DAILY', 'interval': 2} ],
             ],
-            []
-        ]
-    ]
+            [],
+        ],
+    ],
 ];
 
 export default VCalendarForeverEvent;

@@ -1,5 +1,5 @@
 import { DateTime, Duration } from 'luxon';
-import { RRule } from 'rrule'
+import { RRule } from 'rrule';
 
 function veventArrayToEventObject( vevent ) {
     const event = {};
@@ -21,11 +21,10 @@ function veventArrayToEventObject( vevent ) {
             event.duration = prop[3];
             break;
         }
-            case 'rrule':
-                event.rrule = prop[3];
-                break;
+        case 'rrule':
+            event.rrule = prop[3];
+            break;
         }
-
     } );
 
     return event;
@@ -49,13 +48,16 @@ function repeatEvents( events, currentEvent ) {
     rule.all( ( date, i ) => i < 5 ).map( startDate => {
         const newEvent = Object.assign( {}, currentEvent, {
             start: startDate,
-            end: DateTime.fromJSDate( startDate ).plus( Duration.fromISO( currentEvent.duration ) ).toJSDate()
+            end: DateTime.fromJSDate( startDate ).plus( Duration.fromISO( currentEvent.duration ) ).toJSDate(),
         } );
         events.push( newEvent );
     } );
     return events;
 }
 
+function sortEventByDate( a, b ) {
+    return a.start == b.start ? 0 : a.start > b.start ? 1 : -1;
+}
 
 class VCardConverter {
     constructor ( vcard ) {
@@ -81,7 +83,8 @@ class VCardConverter {
         return this.vcard[2]
             .filter( element => element[0] === 'vevent' )
             .map( veventArrayToEventObject )
-            .reduce( repeatEvents, [] );
+            .reduce( repeatEvents, [] )
+            .sort( sortEventByDate );
     }
 }
 
