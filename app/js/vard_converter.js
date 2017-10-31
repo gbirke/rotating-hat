@@ -41,7 +41,7 @@ function repeatEvents( events, currentEvent ) {
         dtstart: currentEvent.start,
     };
     if ( typeof currentEvent.rrule.until !== 'undefined' ) {
-        ruleParams.until = currentEvent.rrule.until;
+        ruleParams.until = DateTime.fromISO( currentEvent.rrule.until ).toJSDate();
     }
 
     const rule = new RRule( ruleParams );

@@ -2,9 +2,9 @@ import VCardConverter from '../vard_converter';
 
 import { DateTime } from 'luxon';
 
-import single from './fixtures/vcard_repeat_once';
-import forever from './fixtures/vcard_repeat_forever';
-
+import RepeatOnceFixture from './fixtures/vcard_repeat_once';
+import RepeatForeverFixture from './fixtures/vcard_repeat_forever';
+import RepeatUntilFixture from './fixtures/vcard_repeat_until';
 
 describe('VCardConverter checks the data format and throws exceptions', () => {
     test( 'Constructor only accepts arrays', () => {
@@ -35,19 +35,19 @@ describe('VCardConverter checks the data format and throws exceptions', () => {
 
 describe( 'Conversion to event object', () => {
     test( 'it returns an event array', () => {
-        const converter = new VCardConverter( single );
+        const converter = new VCardConverter( RepeatOnceFixture );
         expect( converter.getEvents() ).toHaveLength( 2 );
     } );
 
     test( 'it returns event summaries', () => {
-        const converter = new VCardConverter( single );
+        const converter = new VCardConverter( RepeatOnceFixture );
         const events = converter.getEvents();
         expect( events[0].summary ).toBe( 'Hero of the day: Alice' );
         expect( events[1].summary ).toBe( 'Hero of the day: Bob' );
     } );
 
     test( 'it returns start dates', () => {
-        const converter = new VCardConverter( single );
+        const converter = new VCardConverter( RepeatOnceFixture );
         const events = converter.getEvents();
         expect( events[0].start ).toEqual( DateTime.fromObject( {
             year: 2017,
@@ -65,7 +65,7 @@ describe( 'Conversion to event object', () => {
     } );
 
     test( 'it calculates end dates', () => {
-        const converter = new VCardConverter( single );
+        const converter = new VCardConverter( RepeatOnceFixture );
         const events = converter.getEvents();
         expect( events[0].end ).toEqual( DateTime.fromObject( {
             year: 2017,
@@ -85,13 +85,13 @@ describe( 'Conversion to event object', () => {
     describe( 'recurring vcalendar entries', () => {
 
         test( 'it generates five events for each summary', () => {
-            const converter = new VCardConverter( forever );
+            const converter = new VCardConverter( RepeatForeverFixture );
             const events = converter.getEvents();
             expect( events ).toHaveLength(10);
         } );
 
         test( 'it generates the correct dates, interleaves summaries and sorts by date', () => {
-            const converter = new VCardConverter( forever );
+            const converter = new VCardConverter( RepeatForeverFixture );
             const events = converter.getEvents();
             expect( events[0].start ).toEqual( DateTime.fromObject( {
                 year: 2017,
@@ -127,6 +127,11 @@ describe( 'Conversion to event object', () => {
             expect( events[9].summary ).toBe( 'Daily Chores: Dave' );
         } );
 
+        test( 'it stops generating events when given an until date', () => {
+            const converter = new VCardConverter( RepeatUntilFixture );
+            const events = converter.getEvents();
+            expect( events ).toHaveLength(7);
+        } );
     });
 
 } );
