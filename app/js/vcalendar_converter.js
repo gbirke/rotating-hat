@@ -17,7 +17,9 @@ function veventArrayToEventObject( vevent ) {
         case 'duration': {
             const startProp = getProp( vevent, 'dtstart' );
             const start = DateTime.fromISO( startProp[3], { zone: startProp[1].tzid } );
-            event.end = start.plus( Duration.fromISO( prop[3] ) ).toJSDate();
+            // hack until https://github.com/moment/luxon/pull/50 is merged
+            const durationStr = prop[3].replace( /^P(\d+)W$/, ( _, weeks ) => 'P' + ( weeks * 7 ) + 'D' );
+            event.end = start.plus( Duration.fromISO( durationStr ) ).toJSDate();
             event.duration = prop[3];
             break;
         }
