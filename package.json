@@ -21,6 +21,7 @@
   "homepage": "https://github.com/gbirke/rotating-hat#readme",
   "devDependencies": {
     "babel-jest": "^21.2.0",
+    "babel-loader": "^7.1.2",
     "babel-preset-env": "^1.6.1",
     "css-loader": "^0.28.7",
     "eslint": "^4.8.0",

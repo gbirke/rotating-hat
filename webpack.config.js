@@ -59,6 +59,11 @@ const commonConfig = merge([
                         // other vue-loader options go here
                     }
                 },
+                {
+                    test: /\.js$/,
+                    loader: 'babel-loader',
+                    include: [PATHS.app]
+                },
 			]
 		},
         resolve: {
