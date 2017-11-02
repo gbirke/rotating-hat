@@ -65,7 +65,7 @@ $(function () {
     } );
 
     new Vue({
-        el: '#vuetest',
+        el: '#event-preview',
         render: h => h(App),
     });
 

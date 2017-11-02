@@ -1,5 +1,5 @@
 <template>
-    <div id="test-app" class="card" v-show="events.length > 0">
+    <div class="card" v-show="events.length > 0">
         <div class="card-header">Preview</div>
         <div class="card-body">
 
