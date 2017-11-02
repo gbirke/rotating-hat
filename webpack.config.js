@@ -14,7 +14,7 @@ const PATHS = {
 const commonConfig = merge([
 	{
 		entry: {
-			scripts: PATHS.app
+			scripts: path.join( PATHS.app, 'index.js' )
 		},
 		output: {
 			// Put all the bundled stuff in your dist folder
