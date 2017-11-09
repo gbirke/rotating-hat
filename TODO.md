@@ -2,6 +2,7 @@
 
 ## MVP
 - [ ] Help texts
+- [ ] Generate File name for .ics file from form data (e.g. `hero-of-the-day_2017-01-02_3-people_once.ics`)
 - [X] Proper Timezone selection
 - [X] Date Picker
 - [X] Layout form in columns
